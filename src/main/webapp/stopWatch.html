@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+<body>
+	<div ng-app="myApp" ng-controller="timerController">
+		<input type="button" value="Start" id="start"ng-click="getStartTime()"> 
+		{{serverTime}} <br> <br>
+		<input type="button" value="Stop" id="stop" ng-click="getStopTime()">
+		{{serverStorTime}} <br> <br> 
+		 <input type="button" value="TotalTime" id="totalTime" ng-click="getTotalTime()">
+		{{serverTotalTime}}
+	</div>
+	
+	<p><a href="index.jsp">visit next page to get server date and time</a></p>
+	
+	<script>
+		var module=angular.module('myApp',[]);		
+		module.controller("timerController",function($scope,$http){			
+					
+			//$scope.storeTime=0;
+			
+			$scope.getStartTime= function(){
+				console.log("getTime:");				
+				$http.get("rest/stopwatch/start").success(function(response){
+					console.log("startTime:"+response);
+					$scope.serverTime=response;
+				}).error(function(error){
+					console.log("response1"+error.status);
+				});
+			};
+			
+			$scope.getStopTime= function(){
+				console.log("getStoppingTime:");				
+				$http.get("rest/stopwatch/stop").success(function(response){
+					console.log("startTime:"+response);
+					$scope.serverStorTime=response;
+				}).error(function(error){
+					console.log("response1"+error.status);
+				});
+			};
+			
+			 $scope.getTotalTime= function(){
+				console.log("getStoppingTime:");
+				$scope.serverTotalTime=$scope.serverStorTime-$scope.serverTime
+				/* $http.get("rest/stopwatch/difference").success(function(response){
+					console.log("startTime:"+response);
+					$scope.serverTotalTime=response;
+				}).error(function(error){
+					console.log("response1"+error.status);
+				}); */
+			}; 			
+			
+		});
+	
+	</script>
+</body>
+</html>
